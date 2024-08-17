@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .company-info {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .company-info h2 {
+            margin: 0;
+            font-size: 24px;
+            color: #333333;
+        }
+        .company-info p {
+            margin: 5px 0;
+            color: #777777;
+            font-size: 14px;
+        }
+        .section-title {
+            font-size: 20px;
+            color: #555555;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #e0e0e0;
+            font-size: 14px;
+        }
+        th {
+            background-color: #f7f7f7;
+        }
+        .net-salary {
+            font-size: 20px;
+            text-align: right;
+            color: #333333;
+            margin-top: 20px;
+        }
+        .net-salary h2 {
+            margin: 0;
+            color: #0066cc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="company-info">
+            <h1>Unikrew Solutions</h1>
+            <p>Email: support@unikrew.com</p>
+            <p>230/C1, Block - 02 P.E.C.H.S., Karachi, Karachi City, Sindh 75400</p>
+        </div>
+        <div class="header">
+            <h2>Salary Slip - {{ month }}</h2>
+        </div>
+        <div class="details">
+            <div class="section-title">Employee Details</div>
+            <table>
+                <tr>
+                    <th>Employee ID</th>
+                    <td>{{ employee_id }}</td>
+                </tr>
+                <tr>
+                    <th>Name</th>
+                    <td>{{ first_name }} {{ last_name }}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{ email }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="earnings">
+            <div class="section-title">Earnings</div>
+            <table>
+                <tr>
+                    <th>Basic Salary (Rs)</th>
+                    <td>{{ basic_salary }}</td>
+                </tr>
+                <tr>
+                    <th>Conveyance Allowance (Rs)</th>
+                    <td>{{ conveyance_allowance }}</td>
+                </tr>
+                <tr>
+                    <th>Medical Allowance (Rs)</th>
+                    <td>{{ medical_allowance }}</td>
+                </tr>
+                <tr>
+                    <th>Other Allowances (Rs)</th>
+                    <td>{{ other_allowances }}</td>
+                </tr>
+                <tr>
+                    <th>Gross Earnings (Rs)</th>
+                    <td>{{ gross_earnings }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="deductions">
+            <div class="section-title">Deductions</div>
+            <table>
+                <tr>
+                    <th>Provident Fund (Rs)</th>
+                    <td>{{ provident_fund }}</td>
+                </tr>
+                <tr>
+                    <th>Professional Tax (Rs)</th>
+                    <td>{{ professional_tax }}</td>
+                </tr>
+                <tr>
+                    <th>Income Tax (Rs)</th>
+                    <td>{{ income_tax }}</td>
+                </tr>
+                <tr>
+                    <th>Other Deductions (Rs)</th>
+                    <td>{{ other_deductions }}</td>
+                </tr>
+                <tr>
+                    <th>Total Deductions (Rs)</th>
+                    <td>{{ total_deductions }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="net-salary">
+            <h2>Net Salary: Rs {{ net_salary }}</h2>
+        </div>
+    </div>
+</body>
+</html>
