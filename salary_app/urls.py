@@ -4,7 +4,7 @@ from .views import ExcelUploadAPIView, EmployeeViewSet
 
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
-router.register(r'employees', EmployeeViewSet)
+router.register('employee', EmployeeViewSet)
 
 urlpatterns = [
     path('upload-excel/', ExcelUploadAPIView.as_view(), name='upload-excel'),

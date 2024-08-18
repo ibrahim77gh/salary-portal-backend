@@ -75,7 +75,7 @@ class UploadLog(models.Model):
     error_log = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return f"Upload Log: {self.file_name} by {self.uploaded_by} at {self.upload_time}"
+        return f"Upload Log: {self.file_name} by {self.user} at {self.upload_time}"
 
 class ColumnMapping(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

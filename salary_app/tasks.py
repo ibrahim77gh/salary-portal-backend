@@ -5,10 +5,14 @@ from django.conf import settings
 from weasyprint import HTML
 import os
 from .models import SalarySlip
+import logging
+
+logger = logging.getLogger(__name__)
 
 @shared_task
 def generate_and_send_salary_slips(slip_ids):
     slips = SalarySlip.objects.filter(id__in=slip_ids)
+    logger.info("Starting the salary slip generation task")
     for slip in slips:
         try:
             # Prepare the data for the template
@@ -28,7 +32,7 @@ def generate_and_send_salary_slips(slip_ids):
                 'other_deductions': slip.other_deductions,
                 'total_deductions': slip.total_deductions,
                 'net_salary': slip.net_salary,
-                'month': slip.created_at.strftime("%B %Y"),
+                'month': slip.month.strftime('%B %Y'),
             }
 
             # Render the HTML template with context
@@ -49,6 +53,7 @@ def generate_and_send_salary_slips(slip_ids):
             )
             email.attach(f'Salary_Slip_{context["month"]}.pdf', pdf_file, 'application/pdf')
             email.send()
+            logger.info(f"Salary slip sent to {context['email']} for {context['month']}")
 
             # Optionally update the status of the SalarySlip
             slip.status = 'SENT'
@@ -58,4 +63,6 @@ def generate_and_send_salary_slips(slip_ids):
             # Handle or log the exception
             slip.status = 'ERROR'
             slip.error_log = str(e)
+            logger.info(f"ERROR: {str(e)}")
+            logger.error(str(e))
             slip.save()
