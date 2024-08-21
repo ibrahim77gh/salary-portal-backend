@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Employee, SalarySlip, Notification
+from .models import Employee, SalarySlip, Notification, UploadLog
 
 class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,3 +18,9 @@ class NotificationSerializer(serializers.ModelSerializer):
         model = Notification
         fields = ['id', 'message', 'read', 'created_at']
         read_only_fields = ['id', 'created_at']
+
+class UploadLogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UploadLog
+        fields = '__all__'
+        read_only_fields = ['id', 'status', 'total_records', 'processed_records', 'error_log']

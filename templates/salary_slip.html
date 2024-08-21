@@ -57,10 +57,10 @@
             background-color: #f7f7f7;
         }
         .net-salary {
-            font-size: 20px;
+            font-size: 12px;
             text-align: right;
             color: #333333;
-            margin-top: 20px;
+            margin-top: 10px;
         }
         .net-salary h2 {
             margin: 0;
@@ -71,12 +71,12 @@
 <body>
     <div class="container">
         <div class="company-info">
-            <h1>Unikrew Solutions</h1>
+            <h3>Unikrew Solutions</h3>
             <p>Email: support@unikrew.com</p>
             <p>230/C1, Block - 02 P.E.C.H.S., Karachi, Karachi City, Sindh 75400</p>
         </div>
         <div class="header">
-            <h2>Salary Slip - {{ month }}</h2>
+            <h4>Salary Slip - {{ month }}</h4>
         </div>
         <div class="details">
             <div class="section-title">Employee Details</div>
@@ -127,10 +127,10 @@
                     <th>Provident Fund (Rs)</th>
                     <td>{{ provident_fund }}</td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <th>Professional Tax (Rs)</th>
                     <td>{{ professional_tax }}</td>
-                </tr>
+                </tr> -->
                 <tr>
                     <th>Income Tax (Rs)</th>
                     <td>{{ income_tax }}</td>

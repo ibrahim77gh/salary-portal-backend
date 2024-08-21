@@ -10,7 +10,7 @@ from datetime import datetime
 
 from .models import Employee, SalarySlip, UploadLog, ColumnMapping, Notification
 from .tasks import generate_and_send_salary_slips
-from .serializers import EmployeeSerializer, SalarySlipSerializer, NotificationSerializer
+from .serializers import EmployeeSerializer, SalarySlipSerializer, NotificationSerializer, UploadLogSerializer
 
 class EmployeeViewSet(ModelViewSet):
     queryset = Employee.objects.all()
@@ -29,6 +29,14 @@ class NotificationViewSet(ModelViewSet):
     def get_queryset(self):
         # Return notifications only for the currently authenticated user
         return Notification.objects.filter(user=self.request.user).order_by('-created_at')
+
+class UploadLogViewSet(ModelViewSet):
+    serializer_class = UploadLogSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # Return upload logs only for the currently authenticated user
+        return UploadLog.objects.filter(user=self.request.user).order_by('-upload_time')
     
 class MarkNotificationsReadAPIView(APIView):
     permission_classes = [IsAuthenticated]
