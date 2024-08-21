@@ -2,15 +2,21 @@ from celery import shared_task
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.conf import settings
+from django.contrib.auth import get_user_model
+
 from weasyprint import HTML
 import os
-from .models import SalarySlip
+from .models import SalarySlip, Notification
 import logging
 
 logger = logging.getLogger(__name__)
 
 @shared_task
-def generate_and_send_salary_slips(slip_ids):
+def generate_and_send_salary_slips(slip_ids, user_id):
+    # Get the user model
+    UserModel = get_user_model()
+    user = UserModel.objects.get(id=user_id)
+
     slips = SalarySlip.objects.filter(id__in=slip_ids)
     logger.info("Starting the salary slip generation task")
     for slip in slips:
@@ -66,3 +72,17 @@ def generate_and_send_salary_slips(slip_ids):
             logger.info(f"ERROR: {str(e)}")
             logger.error(str(e))
             slip.save()
+
+            # Create a notification for the failed slip
+            Notification.objects.create(
+                user=user,
+                message=f"Failed to send salary slip for {context['month']} to {context['email']}. Error: {str(e)}"
+            )
+
+    # Send Notification
+    Notification.objects.create(
+        user=user,
+        message="All salary slips have been processed!"
+    )
+
+# celery -A salary_portal worker --loglevel=info --pool=solo

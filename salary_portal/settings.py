@@ -184,7 +184,7 @@ SIMPLE_JWT = {
 
 if DEBUG == True:
     # SITE_URL = os.environ.get('SITE_URL')
-    SITE_URL = 'http://localhost:3001/'
+    SITE_URL = 'http://localhost:5173/'
 else:
     SITE_URL = 'https://www.chattly.io/'
     # SITE_URL = 'https://main.d1t7dnmqezwt8r.amplifyapp.com/'

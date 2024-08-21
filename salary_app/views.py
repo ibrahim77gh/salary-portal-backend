@@ -3,23 +3,55 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import IsAuthenticated
+
 import pandas as pd
 from datetime import datetime
 
-from .models import Employee, SalarySlip, UploadLog, ColumnMapping
+from .models import Employee, SalarySlip, UploadLog, ColumnMapping, Notification
 from .tasks import generate_and_send_salary_slips
-from .serializers import EmployeeSerializer
+from .serializers import EmployeeSerializer, SalarySlipSerializer, NotificationSerializer
 
 class EmployeeViewSet(ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
+    permission_classes = [IsAuthenticated]
+
+class SalarySlipViewSet(ModelViewSet):
+    queryset = SalarySlip.objects.all()
+    serializer_class = SalarySlipSerializer
+    permission_classes = [IsAuthenticated]
+
+class NotificationViewSet(ModelViewSet):
+    serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # Return notifications only for the currently authenticated user
+        return Notification.objects.filter(user=self.request.user).order_by('-created_at')
+    
+class MarkNotificationsReadAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        # Get all unread notifications for the current user
+        unread_notifications = Notification.objects.filter(user=request.user, read=False)
+
+        # Mark all unread notifications as read
+        unread_notifications.update(read=True)
+
+        # Return a response indicating success
+        return Response({"message": "All notifications marked as read."}, status=status.HTTP_200_OK)
 
 class ExcelUploadAPIView(APIView):
     def post(self, request):
         # Fetch the uploaded file from the request
         excel_file = request.FILES.get('file')
         if not excel_file:
+            print('No file uploaded')
             return Response({'error': 'No file uploaded'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            print('Excel file uploaded:', excel_file.name)
 
         # Fetch user-specific active column mappings
         user = request.user
@@ -135,7 +167,7 @@ class ExcelUploadAPIView(APIView):
 
         # Trigger the Celery task to generate and send the salary slips
         print(slip_ids)
-        generate_and_send_salary_slips.delay(slip_ids)
+        generate_and_send_salary_slips.delay(slip_ids, user.id)
 
         return Response({'message': 'Excel file processed successfully, background task started for salary slip generation'}, status=status.HTTP_200_OK)
     
